@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List</title>
+    <style>
+        ul, #treeStructure {
+          list-style-type: none;
+        }
+        
+        #treeStructure {
+          margin: 0;
+          padding: 0;
+        }
+        
+        .caret {
+          cursor: pointer;
+          user-select: none;
+        }
+        
+        .caret::before {
+            content: "\25B6";
+            font-size: 10px;
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        
+        .caret-down::before {
+          transform: rotate(90deg);  
+        }
+        
+        .nested {
+          display: none;
+        }
+        
+        .active {
+          display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="treeContainer"></div> 
+    
+    <script>
+        let treeObject = [{
+            name: 'Asia',
+            child: [{
+                name: 'China'
+            }, {
+                name: 'Bangladesh'
+            },{
+                name: 'India',
+                child: [{
+                    name: 'Jharkhand',
+                    child: [{
+                        name: 'Ranchi'
+                    }]
+                }, {
+                    name: 'Delhi'
+                },{
+                    name: 'Karnataka',
+                    child: [{
+                        name: 'Bangalore'
+                    },{
+                        name: 'Mysore'
+                    },{
+                        name: 'Mangalore'
+                    },{
+                        name: 'Shimoga'
+                    }]
+                }]
+            }]
+        },
+        {
+            name: 'Europe',
+            child: [{
+                name: 'France'
+            }, {
+                name: 'Italy',
+                child: [{
+                    name: 'Venice City',
+                }, {
+                    name: 'Rome'
+                }]
+            }]
+        }]
+
+        const createStructure = (obj) => {
+            let ul = document.createElement('ul');
+            ul.setAttribute('class', 'nested');
+
+            obj.forEach(el => {
+                let li = document.createElement('li');
+                if (el.child) {
+                    // first elem of nested ul
+                    let span = document.createElement('span');
+                    span.setAttribute('class', 'caret');
+                    span.innerHTML = el.name;
+                    li.append(span);
+                    
+                    // nested ul
+                    li.append(createStructure(el.child))
+                }else {
+                    li.innerHTML = el.name;
+                }
+                ul.append(li);
+            });
+
+            return ul;
+        }
+
+        const appendtreeToView = (obj, elementIdToAttach) => {
+            let ul = createStructure(obj);
+            ul.removeAttribute('class');
+            ul.setAttribute('id', 'treeStructure')
+            document.getElementById(elementIdToAttach).append(ul);
+        }
+
+        const attachEvent = _ => {
+            let toggler = document.getElementsByClassName("caret");
+            let i;
+
+            for (i = 0; i < toggler.length; i++) {
+                toggler[i].addEventListener("click", function() {
+                    this.parentElement.querySelector(".nested").classList.toggle("active");
+                    this.classList.toggle("caret-down");
+                });
+            }
+        }
+
+        appendtreeToView(treeObject, 'treeContainer')
+        attachEvent();
+    </script>
+</body>
+</html>
