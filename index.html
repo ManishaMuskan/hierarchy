@@ -42,6 +42,7 @@
     </style>
 </head>
 <body>
+    <h3>Dynamic Heirarchical Structure</h3>
     <div id="treeContainer"></div> 
     
     <script>
@@ -112,7 +113,7 @@
             return ul;
         }
 
-        const appendtreeToView = (obj, elementIdToAttach) => {
+        const appendTreeToView = (obj, elementIdToAttach) => {
             let ul = createStructure(obj);
             ul.removeAttribute('class');
             ul.setAttribute('id', 'treeStructure')
@@ -125,13 +126,13 @@
 
             for (i = 0; i < toggler.length; i++) {
                 toggler[i].addEventListener("click", function() {
-                    this.parentElement.querySelector(".nested").classList.toggle("active");
-                    this.classList.toggle("caret-down");
+                    this.parentElement.querySelector(".nested").classList.toggle("active"); // To hide and show
+                    this.classList.toggle("caret-down"); // to toggle the arrow sign based on expanded or collapsed
                 });
             }
         }
 
-        appendtreeToView(treeObject, 'treeContainer')
+        appendTreeToView(treeObject, 'treeContainer')
         attachEvent();
     </script>
 </body>
